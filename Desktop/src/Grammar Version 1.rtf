@@ -1,0 +1,140 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf810
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 LucidaGrande;\f2\froman\fcharset0 Times-Roman;
+\f3\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red36\green38\blue41;\red235\green236\blue237;
+\red37\green127\blue159;\red114\green121\blue129;\red104\green26\blue29;\red43\green39\blue19;}
+{\*\expandedcolortbl;;\csgenericrgb\c0\c0\c0;\cssrgb\c18824\c20000\c21176;\cssrgb\c93725\c94118\c94510;
+\cssrgb\c16863\c56863\c68627;\cssrgb\c52157\c54902\c57647;\cssrgb\c49020\c15294\c15294;\cssrgb\c22353\c20000\c9412;}
+\margl1440\margr1440\vieww15400\viewh13620\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \
+\pard\pardeftab720\partightenfactor0
+
+\fs28 \cf0 grammar Vspj;\
+\
+program 
+\f1 : statement_set;
+\f0 \
+statement_set  
+\f1 :
+\f0   statement 
+\f1 statement_set
+\f0  
+\f2 | 
+\f0  statement;\
+variable 
+\f1 :
+\f0   variable character 
+\f2 | 
+\f0  character;\
+character 
+\f1 :
+\f0  (\'91a\'92..\'92z\'92)+;\
+\
+statement 
+\f1 :
+\f0   assignment 
+\f2 | 
+\f0  if_statement 
+\f2 | 
+\f0  while_statement;\
+assignment
+\f1  :
+\f0   datatype \cf2 variable \'91
+\f2 =
+\f0 \'92  expression;\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf0 if_statement 
+\f1 :
+\f0  \'91if\'92 expression \'91start\'92 statement_set \'91end\'92 | \'91if\'92 expression \'91start\'92 statement_set \'91else\'92 statement_set \'91end\'92 ;\
+\pard\pardeftab720\partightenfactor0
+\cf0 while_statement 
+\f1 :
+\f0  \'91while\'92 expression \'91do\'92  
+\f1 statement_set
+\f0  \'91od\'92;\
+datatype : \'91int\'92;\
+\
+expression : constant | operation;\
+operation : 
+\fs20  
+\fs28 Operand Operator Operand;\
+Operator : +|-|/|*|>|>=|<|<=|==|%;\
+Operand : constant | variable;\
+constant : \'910\'92 | \'911\'92 | \'912\'92 | \'913\'92 | \'914\'92 | \'915\'92 | \'916\'92 | \'917\'92 | \'918\'92 | \'919\'92;\
+	\
+\'910\'92 : 0;\
+\'911\'92 : 1;\
+\'912\'92 : 2;\
+\'913\'92 : 3;\
+\'914\'92 : 4;\
+\'915\'92 : 5;\
+\'916\'92 : 6;\
+\'917\'92 : 7;\
+\'918\'92 : 8;\
+\'919\'92 : 9;\
+\
+constant \'910\'92 : 10 *  constant + 0;\
+constant \'911\'92 : 10 *  constant + 1;\
+constant \'912\'92 : 10 *  constant + 2;\
+constant \'913\'92 : 10 *  constant + 3;\
+constant \'914\'92 : 10 *  constant + 4;\
+constant \'915\'92 : 10 *  constant + 5;\
+constant \'916\'92 : 10 *  constant + 6;\
+constant \'917\'92 : 10 *  constant + 7;\
+constant \'918\'92 : 10 *  constant + 8;\
+constant \'919\'92 : 10 *  constant + 9;\
+\
+Precedence\
+\
+\pard\pardeftab720\sl300\partightenfactor0
+
+\f3\fs26 \cf3 \cb4 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec3 grammar \cf5 \strokec5 Exp\cf3 \strokec3 ;\
+\
+\cf6 \strokec6 /* This will be the entry point of our parser. */\cf3 \strokec3 \
+eval\
+    :    additionExp\
+    ;\
+\
+\cf6 \strokec6 /* Addition and subtraction have the lowest precedence. */\cf3 \strokec3 \
+additionExp\
+    :    multiplyExp \
+         ( \cf7 \strokec7 '+'\cf3 \strokec3  multiplyExp \
+         | \cf7 \strokec7 '-'\cf3 \strokec3  multiplyExp\
+         )* \
+    ;\
+\
+\cf6 \strokec6 /* Multiplication and division have a higher precedence. */\cf3 \strokec3 \
+multiplyExp\
+    :    atomExp\
+         ( \cf7 \strokec7 '*'\cf3 \strokec3  atomExp \
+         | \cf7 \strokec7 '/'\cf3 \strokec3  atomExp\
+         )* \
+    ;\
+\
+\cf6 \strokec6 /* An expression atom is the smallest part of an expression: a number. Or \
+   when we encounter parenthesis, we're making a recursive call back to the\
+   rule 'additionExp'. As you can see, an 'atomExp' has the highest precedence. */\cf3 \strokec3 \
+atomExp\
+    :    \cf5 \strokec5 Number\cf3 \strokec3 \
+    |    \cf7 \strokec7 '('\cf3 \strokec3  additionExp \cf7 \strokec7 ')'\cf3 \strokec3 \
+    ;\
+\
+\cf6 \strokec6 /* A number: can be an integer value, or a decimal value */\cf3 \strokec3 \
+\cf5 \strokec5 Number\cf3 \strokec3 \
+    :    (\cf7 \strokec7 '0'\cf3 \strokec3 ..\cf7 \strokec7 '9'\cf3 \strokec3 )+ (\cf7 \strokec7 '.'\cf3 \strokec3  (\cf7 \strokec7 '0'\cf3 \strokec3 ..\cf7 \strokec7 '9'\cf3 \strokec3 )+)?\
+    ;\
+\
+\cf6 \strokec6 /* We're going to ignore all white space characters */\cf3 \strokec3 \
+WS  \
+    :   (\cf7 \strokec7 ' '\cf3 \strokec3  | \cf7 \strokec7 '\\t'\cf3 \strokec3  | \cf7 \strokec7 '\\r'\cf3 \strokec3 | \cf7 \strokec7 '\\n'\cf3 \strokec3 ) \{$channel=HIDDEN;\}\
+    ;\cf8 \strokec8 \
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs28 \cf0 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\
+
+\fs24 \
+}
